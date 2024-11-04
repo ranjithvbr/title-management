@@ -3,12 +3,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Dashboard from '../components/Dashboard';
 import '@testing-library/jest-dom/extend-expect';
 
-jest.spyOn(window, 'alert').mockImplementation(() => {});
-
-beforeAll(() => {
-  delete window.location;
-  window.location = { href: '' };
-});
+const mockNavigate = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigate,
+}));
 
 describe('Dashboard Component', () => {
   test('displays "Dashboard" text to verify page render', () => {
@@ -30,6 +29,6 @@ describe('Dashboard Component', () => {
   test('logs out and redirects to login page', () => {
     render(<Dashboard />);
     fireEvent.click(screen.getByRole('button', { name: /logout/i }));
-    expect(window.location.href).toBe('/login');
+    expect(mockNavigate).toHaveBeenCalledWith("/login");
   });
 });

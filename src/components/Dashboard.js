@@ -3,8 +3,10 @@ import { ethers } from "ethers";
 import TitleForm from "./TitleForm";
 import TitleList from "./TitleList";
 import "./components.scss";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [walletAddress, setWalletAddress] = useState(localStorage.getItem("walletAddress") || null);
   const [titles, setTitles] = useState([]);
 
@@ -58,7 +60,7 @@ function Dashboard() {
     localStorage.removeItem("token");
     localStorage.removeItem("walletAddress");
     setWalletAddress(null);
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   return (
